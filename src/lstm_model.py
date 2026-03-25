@@ -1,11 +1,12 @@
 import numpy as np
+import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 
 def create_dataset(data, time_step=10):
     X, y = [], []
     for i in range(len(data)-time_step):
-        X.append(data[i:(i+time_step)])
+        X.append(data[i:i+time_step])
         y.append(data[i+time_step])
     return np.array(X), np.array(y)
 
@@ -21,6 +22,8 @@ def train_lstm(series):
     ])
 
     model.compile(optimizer='adam', loss='mse')
-    model.fit(X, y, epochs=5, batch_size=32)
+    model.fit(X, y, epochs=3, batch_size=32)
+
+    model.save('models/lstm_model.h5')
 
     return model
