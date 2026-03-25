@@ -91,7 +91,13 @@ load_dotenv()  # loads variables from .env
 # Utility to safely get DB_PORT
 # ----------------------------
 def get_db_port():
-    db_port_str = os.getenv("DB_PORT", "3306")  # default to 3306
+    # db_port_str = os.getenv("DB_PORT", "3306")  # default to 3306
+    # try:
+    #     return int(db_port_str)
+    # except (TypeError, ValueError):
+    #     raise ValueError(f"Invalid DB_PORT: {db_port_str}. Must be a numeric port.")
+    def get_db_port():
+        db_port_str = os.getenv("DB_PORT", "3306")
     try:
         return int(db_port_str)
     except (TypeError, ValueError):
