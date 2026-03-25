@@ -1,12 +1,15 @@
 from flask import Flask, request, jsonify, render_template
 import pickle, os
 from src.weather import get_weather
-from database import save_record
 from database import save_record, create_table
 
 app = Flask(__name__)
 
+# ✅ Load model
 model = pickle.load(open('models/model.pkl', 'rb'))
+
+# ✅ CREATE TABLE HERE (IMPORTANT FIX)
+create_table()
 
 @app.route('/')
 def home():
@@ -21,16 +24,12 @@ def predict():
     month = int(data['month'])
     year = int(data['year'])
 
-    # 🌦️ Weather
     temp, humidity = get_weather()
 
-    # Prediction
     pred_value = float(model.predict([[hour, day, month, year]])[0])
 
-    # Save to DB
     save_record(hour, pred_value)
 
-    # Suggestion
     if pred_value > 15000:
         suggestion = "⚠️ High energy usage!"
         alert = "⚠️ Peak usage alert!"
@@ -43,7 +42,6 @@ def predict():
 
     cost = pred_value * 0.12
 
-    # 📊 24-hour graph
     hourly_data = []
     min_energy = pred_value
     best_hour = hour
@@ -56,13 +54,11 @@ def predict():
             min_energy = val
             best_hour = h
 
-    # 📅 Weekly forecast
     weekly_data = []
     for d in range(7):
         val = float(model.predict([[hour, (day+d)%7, month, year]])[0])
         weekly_data.append(val)
 
-    # 🧠 Appliance Scheduler
     appliances = {
         "Washing Machine": 2.0,
         "AC": 3.5,
@@ -76,7 +72,6 @@ def predict():
             f"{name}: Use at {best_hour}:00 → Save {savings:.2f} units"
         )
 
-    # 📉 Efficiency score
     score = max(0, 100 - (pred_value / 200))
 
     return jsonify({
@@ -93,12 +88,6 @@ def predict():
         'humidity': humidity
     })
 
-# if __name__ == "__main__":
-#     app.run(host="0.0.0.0", port=10000)
-#     create_table()
-
-import os
-
+# ✅ KEEP THIS ONLY FOR LOCAL RUN (Railway ignores it)
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
-    create_table()
