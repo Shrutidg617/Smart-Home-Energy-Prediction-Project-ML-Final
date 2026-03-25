@@ -158,11 +158,11 @@ print("DB_HOST:", os.getenv("DB_HOST"))
 print("MYSQLHOST:", os.getenv("MYSQLHOST"))
 
 # Try loading .env locally (will NOT crash on Railway)
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except:
-    pass
+# try:
+#     from dotenv import load_dotenv
+#     load_dotenv()
+# except:
+#     pass
 
 # ----------------------------
 # Get DB Port safely
@@ -190,7 +190,7 @@ def get_connection():
         password=os.getenv("DB_PASSWORD"),
         database=os.getenv("DB_NAME"),
         port=get_db_port()
-    ) '''
+    ) 
 def get_connection():
     return mysql.connector.connect(
         host=os.getenv("DB_HOST") or os.getenv("MYSQLHOST"),
@@ -198,6 +198,14 @@ def get_connection():
         password=os.getenv("DB_PASSWORD") or os.getenv("MYSQLPASSWORD"),
         database=os.getenv("DB_NAME") or os.getenv("MYSQLDATABASE"),
         port=int(os.getenv("DB_PORT") or os.getenv("MYSQLPORT") or 3306)
+    )'''
+def get_connection():
+    return mysql.connector.connect(
+        host=os.getenv("DB_HOST"),  
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME"),
+        port=int(os.getenv("DB_PORT"))
     )
 
 # ----------------------------
@@ -245,3 +253,6 @@ def save_record(hour, prediction):
 
     except Exception as e:
         print("❌ Error saving record:", e)
+
+print("DB_HOST:", os.getenv("DB_HOST"))
+print("DB_USER:", os.getenv("DB_USER"))
