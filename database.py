@@ -154,6 +154,9 @@ print("DB_PORT used:", get_db_port()) '''
 import mysql.connector
 import os
 
+print("DB_HOST:", os.getenv("DB_HOST"))
+print("MYSQLHOST:", os.getenv("MYSQLHOST"))
+
 # Try loading .env locally (will NOT crash on Railway)
 try:
     from dotenv import load_dotenv
