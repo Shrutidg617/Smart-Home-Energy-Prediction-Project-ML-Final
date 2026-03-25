@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, render_template
 import pickle, os
 from src.weather import get_weather
 from database import save_record
+from database import save_record, create_table
 
 app = Flask(__name__)
 
@@ -94,3 +95,4 @@ def predict():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+    create_table()
