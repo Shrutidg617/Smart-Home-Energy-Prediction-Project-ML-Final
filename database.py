@@ -164,6 +164,7 @@ except:
 # ----------------------------
 # Get DB Port safely
 # ----------------------------
+'''
 def get_db_port():
     db_port = os.getenv("DB_PORT")
 
@@ -171,11 +172,14 @@ def get_db_port():
     if not db_port or not db_port.isdigit():
         return 3306  # safe default
 
-    return int(db_port)
+    return int(db_port) '''
+def get_db_port():
+    return int(os.getenv("DB_PORT") or os.getenv("MYSQLPORT") or 3306)
 
 # ----------------------------
 # Create DB connection
 # ----------------------------
+'''
 def get_connection():
     return mysql.connector.connect(
         host=os.getenv("DB_HOST"),
@@ -183,6 +187,14 @@ def get_connection():
         password=os.getenv("DB_PASSWORD"),
         database=os.getenv("DB_NAME"),
         port=get_db_port()
+    ) '''
+def get_connection():
+    return mysql.connector.connect(
+        host=os.getenv("DB_HOST") or os.getenv("MYSQLHOST"),
+        user=os.getenv("DB_USER") or os.getenv("MYSQLUSER"),
+        password=os.getenv("DB_PASSWORD") or os.getenv("MYSQLPASSWORD"),
+        database=os.getenv("DB_NAME") or os.getenv("MYSQLDATABASE"),
+        port=int(os.getenv("DB_PORT") or os.getenv("MYSQLPORT") or 3306)
     )
 
 # ----------------------------
