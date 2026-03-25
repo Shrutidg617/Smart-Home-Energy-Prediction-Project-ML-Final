@@ -11,12 +11,12 @@ model = pickle.load(open('models/model.pkl', 'rb'))
 # ✅ CREATE TABLE HERE (IMPORTANT FIX)
 create_table()
 
-# @app.route('/')
-# def home():
-#     return render_template('index.html')
 @app.route('/')
 def home():
-    return "HOME WORKING"
+    return render_template('index.html')
+# @app.route('/')
+# def home():
+#     return "HOME WORKING"
 
 @app.route('/predict', methods=['POST'])
 def predict():
