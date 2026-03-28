@@ -3,7 +3,7 @@ import os
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
-from preprocess import load_and_process
+from src.preprocess import load_and_process
 from xgboost import XGBRegressor
 
 # Ensure models folder exists
