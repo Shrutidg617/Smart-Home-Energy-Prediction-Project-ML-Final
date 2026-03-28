@@ -40,20 +40,29 @@ def predict():
         # Weather
         temp, humidity = get_weather()
 
-        # ===== CREATE DATAFRAME SAME AS TRAINING =====
+        # ===== CREATE INPUT DATAFRAME =====
         input_df = pd.DataFrame({
             'Datetime': [f"{year}-{month:02d}-{day+1:02d} {hour:02d}:00:00"]
         })
 
         input_df['Datetime'] = pd.to_datetime(input_df['Datetime'])
-
-        # Feature engineering (IMPORTANT)
         input_df = create_features(input_df)
 
         features = input_df.drop(columns=['Datetime'])
 
+        # ===== ADD MISSING LAG FEATURES =====
+        for col in ['lag_1', 'lag_24', 'rolling_mean_24']:
+            if col not in features.columns:
+                features[col] = 0
+
+        # Correct column order
+        features = features[['hour', 'dayofweek', 'month', 'year', 'is_weekend',
+                             'lag_1', 'lag_24', 'rolling_mean_24']]
+
         # Prediction
         pred_value = float(model.predict(features)[0])
+        pred_value = max(0, pred_value)
+
         print("Prediction:", pred_value)
 
         # Suggestions
@@ -82,7 +91,15 @@ def predict():
             temp_df = create_features(temp_df)
             temp_features = temp_df.drop(columns=['Datetime'])
 
+            for col in ['lag_1', 'lag_24', 'rolling_mean_24']:
+                if col not in temp_features.columns:
+                    temp_features[col] = 0
+
+            temp_features = temp_features[['hour', 'dayofweek', 'month', 'year', 'is_weekend',
+                                           'lag_1', 'lag_24', 'rolling_mean_24']]
+
             val = float(model.predict(temp_features)[0])
+            val = max(0, val)
             hourly_data.append(val)
 
             if val < min_energy:
@@ -99,7 +116,15 @@ def predict():
             temp_df = create_features(temp_df)
             temp_features = temp_df.drop(columns=['Datetime'])
 
+            for col in ['lag_1', 'lag_24', 'rolling_mean_24']:
+                if col not in temp_features.columns:
+                    temp_features[col] = 0
+
+            temp_features = temp_features[['hour', 'dayofweek', 'month', 'year', 'is_weekend',
+                                           'lag_1', 'lag_24', 'rolling_mean_24']]
+
             val = float(model.predict(temp_features)[0])
+            val = max(0, val)
             weekly_data.append(val)
 
         # ===== APPLIANCE TIPS =====
