@@ -38,12 +38,42 @@ canvas {
     border-radius: 10px;
     padding: 10px;
 }
+.energy-img {
+    width: 140px;
+    border-radius: 18px;
+    
+    /* Soft shadow (professional) */
+    box-shadow: 
+        0 8px 20px rgba(0, 0, 0, 0.15),
+        0 2px 6px rgba(0, 0, 0, 0.1);
+
+    /* Smooth transitions */
+    transition: all 0.35s ease;
+
+    /* Slight transparency for modern feel */
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+}
+
+/* Hover effect (very subtle, professional) */
+.energy-img:hover {
+    transform: translateY(-4px) scale(1.03);
+    
+    box-shadow: 
+        0 12px 30px rgba(0, 0, 0, 0.2),
+        0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.energy-img {
+    backdrop-filter: blur(6px);
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="container">
+    <img src="static/images/energy.png" height="150px" class="energy-img"> <br>
 
 <h2>Smart Home Energy AI</h2>
 
