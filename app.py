@@ -2,15 +2,15 @@ from flask import Flask, request, jsonify, render_template
 import pickle
 import os
 from src.weather import get_weather
-from database import save_record, create_table
+# from database import save_record, create_table
 
 app = Flask(__name__)
 
 print("Starting app...")
 
 # Create DB table
-create_table()
-print("Database ready")
+# create_table()
+# print("Database ready")
 
 # Load model
 MODEL_PATH = os.path.join(os.path.dirname(__file__), 'models', 'model.pkl')
@@ -46,7 +46,7 @@ def predict():
         print("Prediction:", pred_value)
 
         # Save to DB
-        save_record(hour, pred_value)
+        # save_record(hour, pred_value)
 
         # Suggestions
         if pred_value > 15000:
